@@ -1,20 +1,28 @@
 ---
 # tasks file for lb-nginx
 
-- name: Nginx setup
-  apt: pkg=nginx state=present update_cache=true
+- name: Check that you can connect (GET) to a page and it returns a status 200
+  ansible.builtin.uri:
+    url: http://www.google.com
 
-- name: config file
-  template:
-    src: ../templates/nginx.cfg.j2
-    dest: /etc/nginx/sites-available/nginx.cfg
-  when: hostvars[inventory_hostname]['inventory_hostname'] == "load-balancer"
+- name: Add epel-release repo
+  yum:
+    name: http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+- name: Install systemd
+  yum: 
+    name: systemd
+    state: present
 
-- name: Create symlink
-  file:
-    src: /etc/nginx/sites-available/nginx.cfg
-    dest: /etc/nginx/sites-enabled/default
-    state: link
+- name: Install nginx
+  yum:
+    name: nginx
+    state: present
+
+- name: config files
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
 
 - name: start nginx
   service:
