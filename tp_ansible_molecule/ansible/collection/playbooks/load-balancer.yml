@@ -1,0 +1,11 @@
+- hosts: webservers
+  gather_facts: True
+
+  roles:
+    - ../roles/server-nginx
+
+- hosts: loadbalancer
+  gather_facts: True
+
+  roles:
+    - ../roles/lb-haproxy
