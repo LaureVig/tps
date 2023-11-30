@@ -11,9 +11,12 @@
     - name: Create a container
       community.docker.docker_container:
         name: "{{ item.name }}"
-        image: "{{ item.image }}"
+        image: "/{{ item.image }}"
+        privileged: "{{ item.privileged | default(omit) }}"
+        volumes: "{{ item.volumes | default(omit) }}"
+        capabilities: "{{ item.capabilities | default(omit) }}"
+        command: "{{ item.command | default('/usr/sbin/init') }}"
         state: started
-        command: sleep 3600
         log_driver: json-file
       register: result
       loop: "{{ molecule_yml.platforms }}"

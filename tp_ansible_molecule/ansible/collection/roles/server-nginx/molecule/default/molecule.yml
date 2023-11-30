@@ -7,7 +7,6 @@ driver:
 platforms:
   - name: molecule-centos
     image: centos:centos7.9.2009
-    dockerfile: Dockerfile.j2
 provisioner:
   name: ansible
   inventory:
