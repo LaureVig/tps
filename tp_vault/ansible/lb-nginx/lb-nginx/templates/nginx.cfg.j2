@@ -1,7 +1,8 @@
 
 upstream backend {
-		server 172.17.0.3:80;
-		server 172.17.0.2:80;
+	{% for item in groups['webservers'] %}
+#		server {{ hostvars[item]}}:80;
+	{% endfor %}
 }
 server {
 	listen 80;

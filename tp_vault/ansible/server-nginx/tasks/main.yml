@@ -1,19 +1,27 @@
 ---
 # tasks file for server-nginx
+- name: Check that you can connect (GET) to a page and it returns a status 200
+  ansible.builtin.uri:
+    url: http://www.google.com
 
-- name: Nginx setup
-  apt: pkg=nginx state=present update_cache=true
+- name: Add epel-release repo
+  yum:
+    name: http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+- name: Install systemd
+  yum: 
+    name: systemd
+    state: present
+
+- name: Install nginx
+  yum:
+    name: nginx
+    state: present
 
 - name: config files
   copy:
-    src: nginxserveur.cfg
-    dest: /etc/nginx/sites-available/nginx.cfg
-
-- name: Create symlink
-  file:
-    src: /etc/nginx/sites-available/nginx.cfg
-    dest: /etc/nginx/sites-enabled/default
-    state: link
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
 
 - name: create folder
   file:
@@ -28,11 +36,10 @@
     text: "{{hostvars[inventory_hostname]['text'] }}"
     color: "{{hostvars[inventory_hostname]['color'] }}"
   loop:
-    - { src: ~/Documents/tp_1/src/index.html.j2, dest: index.html}
-    - { src: ~/Documents/tp_1/src/style.css.j2, dest: style.css}
+    - { src: index.html.j2, dest: index.html}
+    - { src: style.css.j2, dest: style.css}
 
 - name: restart nginx
   service:
     name: nginx
-    state: restarted
-
+    state: started
