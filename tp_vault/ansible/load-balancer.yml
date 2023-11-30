@@ -1,7 +1,0 @@
-- hosts: webservers
-  roles:
-    - server-nginx
-
-- hosts: loadbalancer
-  roles:
-    - lb-haproxy
