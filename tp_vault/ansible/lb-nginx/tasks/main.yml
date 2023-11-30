@@ -1,0 +1,22 @@
+---
+# tasks file for lb-nginx
+
+- name: Nginx setup
+  apt: pkg=nginx state=present update_cache=true
+
+- name: config file
+  template:
+    src: ../templates/nginx.cfg.j2
+    dest: /etc/nginx/sites-available/nginx.cfg
+  when: hostvars[inventory_hostname]['inventory_hostname'] == "load-balancer"
+
+- name: Create symlink
+  file:
+    src: /etc/nginx/sites-available/nginx.cfg
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started

@@ -1,0 +1,18 @@
+---
+# tasks file for lb-haproxy
+
+- name: "Installing haproxy"
+  package:
+    name: "haproxy"
+    state: present
+
+- name: "Copying configuration file"
+  template:
+    src: "haproxy.cfg.j2"
+    dest: "/etc/haproxy/haproxy.cfg"
+
+- name: "restarting haproxy services"
+  service:
+    name: "haproxy"
+    state: restarted
+
