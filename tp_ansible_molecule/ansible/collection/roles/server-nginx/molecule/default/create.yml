@@ -11,7 +11,7 @@
     - name: Create a container
       community.docker.docker_container:
         name: "{{ item.name }}"
-        image: "/{{ item.image }}"
+        image: "{{ item.image }}"
         privileged: "{{ item.privileged | default(omit) }}"
         volumes: "{{ item.volumes | default(omit) }}"
         capabilities: "{{ item.capabilities | default(omit) }}"

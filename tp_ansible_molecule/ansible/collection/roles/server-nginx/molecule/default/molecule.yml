@@ -7,6 +7,12 @@ driver:
 platforms:
   - name: molecule-centos
     image: centos:centos7.9.2009
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: True
 provisioner:
   name: ansible
   inventory:
