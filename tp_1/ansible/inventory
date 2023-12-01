@@ -1,6 +1,0 @@
-[webservers]
-serveur1 ansible_connection=docker ansible_host_name="serveur 1"
-serveur2 ansible_connection=docker ansible_host_name="serveur 2"
-
-[loadbalancer]
-load-balancer ansible_connection=docker ansible_become_password=""

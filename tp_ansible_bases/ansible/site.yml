@@ -1,0 +1,59 @@
+- hosts: all
+  gather_facts: True
+
+  tasks:
+   - name: Nginx setup
+     apt: pkg=nginx state=present update_cache=true
+
+   - name: config file
+     template:
+       src: ~/Documents/tp_1/ansible/nginx.cfg.j2
+       dest: /etc/nginx/sites-available/nginx.cfg
+     when: hostvars[inventory_hostname]['inventory_hostname'] == "load-balancer"
+
+   - name: config files
+     copy:
+       src: ~/Documents/tp_1/ansible/nginxserveur.cfg
+       dest: /etc/nginx/sites-available/nginx.cfg
+     when: hostvars[inventory_hostname]['inventory_hostname'] != "load-balancer"
+
+#   - name: start nginx
+#     service:
+#       name: nginx
+#       state: started
+
+   - name: Create symlink
+     file:
+       src: /etc/nginx/sites-available/nginx.cfg
+       dest: /etc/nginx/sites-enabled/default
+       state: link
+
+   - name: start nginx
+     service:
+       name: nginx
+       state: started
+
+- hosts: webservers
+  gather_facts: True
+
+  tasks:
+   - name: create folder
+     file:
+       path: /home/foo/static-site/
+       state: directory
+
+   - name: source copy
+     template:
+       src: "{{ item.src }}"
+       dest: "/home/foo/static-site/{{ item.dest }}"
+     vars:
+       text: "{{hostvars[inventory_hostname]['text'] }}"
+       color: "{{hostvars[inventory_hostname]['color'] }}"
+     loop:
+       - { src: ~/Documents/tp_1/src/index.html.j2, dest: index.html}
+       - { src: ~/Documents/tp_1/src/style.css.j2, dest: style.css}
+
+   - name: restart nginx
+     service:
+       name: nginx
+       state: restarted
