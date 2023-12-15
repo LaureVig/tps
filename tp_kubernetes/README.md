@@ -1,6 +1,9 @@
+
 Kubernetes (kubeadm/kubectl/kubelet) installés
 
 Tentative d'initialisation de cluster
 
-problemo : 
-  - problème avec un truc qui s'appelle CRI (je capte pas grand chose au problème)
+Etapes pour lancer un cluster :
+
+- kubeadm init (--config config-file.yaml) : sur le master node pour créer le cluster
+- kubeadm join ... : sur chaque worker node pour les ajouter au cluster
