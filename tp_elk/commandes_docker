@@ -1,0 +1,7 @@
+#/bin/bash
+
+docker stop load-balancer serveur1 serveur2
+docker rm load-balancer serveur1 serveur2
+docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup -d --name serveur1 -p 127.0.0.1:8082:80 centos:centos7.9.2009 /usr/sbin/init
+docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup -d --name serveur2 -p 127.0.0.1:8083:80 centos:centos7.9.2009 /usr/sbin/init
+docker run --privileged -v /sys/fs/cgroup:/sys/fs/cgroup -d --name load-balancer -p 127.0.0.1:8080:80 centos:centos7.9.2009 /usr/sbin/init
